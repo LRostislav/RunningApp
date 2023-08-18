@@ -5,10 +5,12 @@ import com.rost.runningapp.models.Club;
 import com.rost.runningapp.repository.ClubRepository;
 import com.rost.runningapp.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ClubServiceImpl implements ClubService {
     private ClubRepository clubRepository;
 
