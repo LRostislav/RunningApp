@@ -22,34 +22,21 @@
     <section layout:fragment="body" class="py-5">
         <div class="container px-5 my-5">
             <div class="text-center mb-5">
-                <h1 class="fw-bolder">Runners Near You</h1>
-                <p class="lead fw-normal text-muted mb-0">Runners found in your area</p>
+                <h1 class="fw-bolder">Find Running Clubs</h1>
+                <p class="lead fw-normal text-muted mb-0">Groups of passionate near you</p>
             </div>
             <div class="row gx-5">
-
-
-                <div th:each="club :${clubs}" class="col-lg-6">
-                    <div class="position-relative mb-5">
+                <div th:each="club :${clubs}" class="col-lg-6 mb-2">
+                    <div class="position-relative mb-3">
                         <img class="img-fluid rounded-3 mb-3" th:src="${club.photoUrl}" alt="..." />
                         <a th:text="${club.title}" class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!">Project name</a>
                     </div>
+                    <a class="btn btn-primary" th:href="@{/clubs/{clubId}/edit(clubId=${club.id})}">Edit</a>
                 </div>
 
 
                 <div class="col-lg-6">
                     <div class="position-relative mb-5">
-                        <img class="img-fluid rounded-3 mb-3" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." />
-                        <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!">Project name</a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="position-relative mb-5 mb-lg-0">
-                        <img class="img-fluid rounded-3 mb-3" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." />
-                        <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!">Project name</a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="position-relative">
                         <img class="img-fluid rounded-3 mb-3" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." />
                         <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!">Project name</a>
                     </div>
