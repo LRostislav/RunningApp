@@ -4,7 +4,6 @@ import com.rost.runningapp.dto.ClubDto;
 import com.rost.runningapp.models.Club;
 import com.rost.runningapp.service.ClubService;
 import jakarta.validation.Valid;
-import org.hibernate.boot.jaxb.spi.Binding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
