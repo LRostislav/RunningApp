@@ -6,30 +6,32 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
-@Table(name = "clubs")
-public class Club {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
+    private String name;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private String type;
     private String photoUrl;
-    private String content;
     @CreationTimestamp
     private LocalDateTime createdOn;
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
-    private Set<Event> events = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "club_id", nullable = false)  //  событие всегда привязано к клубу
+    private Club club;
 }
