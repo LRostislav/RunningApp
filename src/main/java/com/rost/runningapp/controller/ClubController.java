@@ -21,6 +21,7 @@ public class ClubController {
         this.clubService = clubService;
     }
 
+    // List of clubs
     @GetMapping("/clubs")
     public String listClubs(Model model) {
         List<ClubDto> clubs = clubService.findAllClubs();
@@ -28,6 +29,7 @@ public class ClubController {
         return "clubs-list";
     }
 
+    // Information about one club
     @GetMapping("/clubs/{clubId}")
     public String clubDetail(@PathVariable("clubId") Long clubId, Model model) {
         ClubDto clubDto = clubService.findClubById(clubId);
@@ -35,6 +37,8 @@ public class ClubController {
         return "clubs-detail";
     }
 
+
+    // Creating a new club
     @GetMapping("/clubs/new")
     public String createClubForm(Model model) {
         Club club = new Club();
@@ -54,6 +58,7 @@ public class ClubController {
         return "redirect:/clubs";
     }
 
+    // Club search bar
     @GetMapping("/clubs/search")
     public String searchClub(@RequestParam(value = "query") String query, Model model) {
         List<ClubDto> clubs = clubService.searchClubs(query);
@@ -61,12 +66,14 @@ public class ClubController {
         return "clubs-list";
     }
 
+    // Deleting a club
     @GetMapping("/clubs/{clubId}/delete")
     public String deleteClub(@PathVariable("clubId") Long clubId){
         clubService.delete(clubId);
         return "redirect:/clubs";
     }
 
+    // Editing a club
     @GetMapping("/clubs/{clubId}/edit")
     public String editClubForm(@PathVariable("clubId") Long clubId, Model model){
         ClubDto club = clubService.findClubById(clubId);
@@ -77,8 +84,9 @@ public class ClubController {
     @PostMapping("/clubs/{clubId}/edit")
     public String updateClub(@PathVariable("clubId") Long clubId,
                              @Valid @ModelAttribute("club") ClubDto club,
-                             BindingResult result){
+                             BindingResult result, Model model){
         if (result.hasErrors()) {
+            model.addAttribute("club", club);
             return "clubs-edit";
         }
         club.setId(clubId);
