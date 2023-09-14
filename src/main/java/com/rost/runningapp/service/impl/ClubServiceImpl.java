@@ -2,7 +2,10 @@ package com.rost.runningapp.service.impl;
 
 import com.rost.runningapp.dto.ClubDto;
 import com.rost.runningapp.models.Club;
+import com.rost.runningapp.models.UserEntity;
 import com.rost.runningapp.repository.ClubRepository;
+import com.rost.runningapp.repository.UserRepository;
+import com.rost.runningapp.security.SecurityUtil;
 import com.rost.runningapp.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,12 @@ import static com.rost.runningapp.mapper.ClubMapper.mapToClubDto;
 @Service
 public class ClubServiceImpl implements ClubService {
     private ClubRepository clubRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public ClubServiceImpl(ClubRepository clubRepository) {
+    public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
         this.clubRepository = clubRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -30,7 +35,10 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public Club saveClub(ClubDto clubDto) {
+        String userEmail = SecurityUtil.getSessionUser();
+        UserEntity user = userRepository.findByEmail(userEmail);
         Club club = mapToClub(clubDto);
+        club.setCreatedBy(user);
         return clubRepository.save(club);
     }
 
@@ -42,7 +50,10 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public void updateClub(ClubDto clubDto) {
+        String userEmail = SecurityUtil.getSessionUser();
+        UserEntity user = userRepository.findByEmail(userEmail);
         Club club = mapToClub(clubDto);
+        club.setCreatedBy(user);
         clubRepository.save(club);
     }
 

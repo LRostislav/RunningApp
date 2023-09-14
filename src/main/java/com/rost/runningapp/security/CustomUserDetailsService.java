@@ -21,15 +21,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findFirstByUsername(username);
-        if (user != null) {
+        if(user != null) {
             User authUser = new User(
                     user.getEmail(),
                     user.getPassword(),
-                    user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                    user.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName()))
                             .collect(Collectors.toList())
             );
             return authUser;
