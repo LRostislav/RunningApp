@@ -2,7 +2,10 @@ package com.rost.runningapp.controller;
 
 import com.rost.runningapp.dto.ClubDto;
 import com.rost.runningapp.models.Club;
+import com.rost.runningapp.models.UserEntity;
+import com.rost.runningapp.security.SecurityUtil;
 import com.rost.runningapp.service.ClubService;
+import com.rost.runningapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,16 +18,25 @@ import java.util.List;
 @Controller
 public class ClubController {
     private ClubService clubService;
+    private UserService userService;
 
     @Autowired
-    public ClubController(ClubService clubService) {
+    public ClubController(ClubService clubService, UserService userService) {
         this.clubService = clubService;
+        this.userService = userService;
     }
 
     // List of clubs
     @GetMapping("/clubs")
     public String listClubs(Model model) {
+        UserEntity user = new UserEntity();
         List<ClubDto> clubs = clubService.findAllClubs();
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByEmail(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("clubs", clubs);
         return "clubs-list";
     }
@@ -32,7 +44,14 @@ public class ClubController {
     // Information about one club
     @GetMapping("/clubs/{clubId}")
     public String clubDetail(@PathVariable("clubId") Long clubId, Model model) {
+        UserEntity user = new UserEntity();
         ClubDto clubDto = clubService.findClubById(clubId);
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByEmail(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("club", clubDto);
         return "clubs-detail";
     }
