@@ -3,7 +3,10 @@ package com.rost.runningapp.controller;
 import com.rost.runningapp.dto.ClubDto;
 import com.rost.runningapp.dto.EventDto;
 import com.rost.runningapp.models.Event;
+import com.rost.runningapp.models.UserEntity;
+import com.rost.runningapp.security.SecurityUtil;
 import com.rost.runningapp.service.EventService;
+import com.rost.runningapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,16 +22,25 @@ import java.util.List;
 @Controller
 public class EventController {
     private EventService eventService;
+    private UserService userService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
+        this.userService = userService;
     }
 
     // List of events
     @GetMapping("/events")
     public String eventList(Model model) {
+        UserEntity user = new UserEntity();
         List<EventDto> events = eventService.findAllEvents();
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByEmail(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("events", events);
         return "events-list";
     }
@@ -36,7 +48,15 @@ public class EventController {
     // Information about one event
     @GetMapping("/events/{eventId}")
     public String viewEvent(@PathVariable("eventId") Long eventId, Model model) {
+        UserEntity user = new UserEntity();
         EventDto eventDto = eventService.findByEventId(eventId);
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByEmail(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("club", eventDto);
         model.addAttribute("event", eventDto);
         return "events-detail";
     }
